@@ -11,8 +11,8 @@ AAbstractHeroCharacter::AAbstractHeroCharacter()
 	bUseControllerRotationRoll = false;
 
 	// Set the size of our collision capsule.
-	GetCapsuleComponent()->SetCapsuleRadius(8.0f);
-	GetCapsuleComponent()->SetCapsuleHalfHeight(8.0f);
+	GetCapsuleComponent()->SetCapsuleRadius(16.0f);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(32.0f);
 
 	// Create a camera boom attached to the root (capsule)
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
@@ -27,15 +27,15 @@ AAbstractHeroCharacter::AAbstractHeroCharacter()
 	SpringArmComponent->bInheritRoll = false;
 	SpringArmComponent->bAbsoluteRotation = true;
 
-	SpringArmComponent->bEnableCameraLag = true;
-	SpringArmComponent->CameraLagSpeed = 0.1f;
-	SpringArmComponent->CameraLagMaxDistance = 256.0f;
+	// SpringArmComponent->bEnableCameraLag = true;
+	// SpringArmComponent->CameraLagSpeed = 0.1f;
+	// SpringArmComponent->CameraLagMaxDistance = 256.0f;
 
 	// Create an orthographic camera (no perspective) and attach it to the boom
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	CameraComponent->OrthoWidth = 512.0f;
+	CameraComponent->OrthoWidth = 1024.0f;
 	CameraComponent->OrthoNearClipPlane = 0.0f;
 	CameraComponent->OrthoFarClipPlane = 1000.0f;
 
@@ -46,14 +46,15 @@ AAbstractHeroCharacter::AAbstractHeroCharacter()
 	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
 	MovementComponent->bOrientRotationToMovement = false;
 	MovementComponent->Mass = 60.0f;
-	MovementComponent->GravityScale = 1.25f;
+	MovementComponent->GravityScale = 1.0f;
 	
 	MovementComponent->AirControl = 1.0f;
-	MovementComponent->JumpZVelocity =320.f;
+
+	MovementComponent->JumpZVelocity = FMath::Sqrt(GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2 * MovementComponent->GetGravityZ);
 
 	MovementComponent->GroundFriction = 1.0f;
-	MovementComponent->MinAnalogWalkSpeed = 200.0f;
 	MovementComponent->MaxWalkSpeed = 250.0f;
+	MovementComponent->MinAnalogWalkSpeed = 200.0f;
 	MovementComponent->MaxWalkSpeedCrouched = 100.0f;
 	MovementComponent->BrakingDecelerationWalking = 2500.0f;
 	MovementComponent->MaxStepHeight = 0.0f;

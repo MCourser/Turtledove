@@ -12,3 +12,8 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
+Build/
+CMakeLists.txt
+Turtledove.code-workspace
+cmake-build-debug/
+
